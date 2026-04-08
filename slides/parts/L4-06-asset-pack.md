@@ -71,7 +71,7 @@ layout: default
 ## 资产包整合格式要求
 
 <div class="mt-4 card" style="font-size:0.82rem;padding:.8rem 1rem;">
-<div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">最终提交格式：一式PDF或PPT，包含：</div>
+<div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">最终提交格式：一份PDF或PPT，包含：</div>
 <div style="line-height:1.8;">
   <strong>封面</strong>：IP名称 + Logo概念图<br>
   <strong>第一部分</strong>：5张主题海报（每张附完整提示词）<br>
@@ -89,22 +89,22 @@ layout: default
 <div class="mt-4 grid grid-cols-2 gap-3" style="font-size:0.82rem;">
 
 <div style="padding:.6rem .8rem;background:rgba(34,197,94,.1);border-radius:4px;">
-  <strong style="color:#22c55e;">✅ 已完成</strong><br>
+  <strong style="color:#22c55e;">已完成</strong><br>
   5张风格统一的海报（上次作业）
 </div>
 
 <div style="padding:.6rem .8rem;background:rgba(245,158,11,.1);border-radius:4px;">
-  <strong style="color:#f59e0b;">⏳ 本次完成</strong><br>
+  <strong style="color:#f59e0b;">本次完成</strong><br>
   2~3个AI视频（文生+图生）
 </div>
 
 <div style="padding:.6rem .8rem;background:rgba(245,158,11,.1);border-radius:4px;">
-  <strong style="color:#f59e0b;">⏳ 本次完成</strong><br>
+  <strong style="color:#f59e0b;">本次完成</strong><br>
   校准后的英文文案
 </div>
 
 <div style="padding:.6rem .8rem;background:rgba(148,163,184,.1);border-radius:4px;">
-  <strong style="color:#94A3B8;">⬜ 待完成</strong><br>
+  <strong style="color:#94A3B8;">待完成</strong><br>
   古今对比图 + 视觉风格卡
 </div>
 

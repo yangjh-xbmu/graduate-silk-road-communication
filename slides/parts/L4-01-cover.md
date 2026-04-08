@@ -13,10 +13,10 @@ layout: cover
   </h1>
   <div class="gold-line" style="width:100px;"></div>
   <div style="font-size:1.5rem;color:#D4A843;font-weight:300;margin-bottom:2rem;">
-    第四讲：动态叙事
+    第四讲：镜头
   </div>
   <div style="color:#94A3B8;font-size:0.85rem;line-height:2.2;">
-    AI视频生产：文生视频 · 图生视频 · 跨文化语言校准<br>
+    AI视频生产流水线与跨文化语言校准<br>
     杨志宏 副教授 · 2025-2026 第二学期
   </div>
 </div>
@@ -30,27 +30,27 @@ layout: cover
 <div class="card">
   <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">01 · 案例冲击</div>
   <div class="mt-2" style="font-weight:600;">AI视频如何重塑内容生产</div>
-  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">Runway · 即梦 · Sora</div>
+  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">Runway · 海螺AI · 即梦 · 可灵 四款工具对比</div>
 </div>
 
 <div class="card">
-  <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">02 · 即梦视频功能</div>
-  <div class="mt-2" style="font-weight:600;">文生视频 / 图生视频详解</div>
-  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">时间轴 · 运镜词 · 提示词模板</div>
+  <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">02 · 海螺AI视频</div>
+  <div class="mt-2" style="font-weight:600;">文生视频 · 图生视频 · 运镜控制</div>
+  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">视频提示词 = 六要素 + 时间轴 + 运镜</div>
 </div>
 
 <div class="card">
   <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">03 · 课堂实操</div>
-  <div class="mt-2" style="font-weight:600;">用即梦生成丝路文化短视频</div>
-  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">每人1个文生视频 + 1个图生视频</div>
+  <div class="mt-2" style="font-weight:600;">用海螺生成丝路文化短视频</div>
+  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">当堂出成品 · 每人至少两条</div>
 </div>
 
 <div class="card">
-  <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">04 · 语言校准</div>
-  <div class="mt-2" style="font-weight:600;">告别Chinglish的跨文化传播</div>
-  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">语义等效 · 文化语境 · CTA本地化</div>
+  <div style="color:#B8860B;font-size:0.72rem;letter-spacing:.1em;font-weight:600;">04 · 跨文化校准</div>
+  <div class="mt-2" style="font-weight:600;">让AI翻译告别Chinglish</div>
+  <div class="mt-1" style="font-size:0.82rem;color:#78716C;">语义等效 · 文化语境替换 · CTA本地化</div>
 </div>
 
 </div>
 
-<div class="mt-4" style="font-size:0.78rem;color:#78716C;">总时长：90 分钟 · 请打开浏览器并登录 jimeng.jianying.com</div>
+<div class="mt-4" style="font-size:0.78rem;color:#78716C;">总时长：90 分钟 · 请打开笔记本电脑并登录 hailuoai.com</div>

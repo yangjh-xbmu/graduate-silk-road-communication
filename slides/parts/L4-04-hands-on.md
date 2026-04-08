@@ -6,7 +6,7 @@ layout: default
   <div class="section-num">03</div>
   <div style="color:white;font-size:2rem;font-weight:700;margin-top:0.5rem;">课堂实操</div>
   <div class="gold-line" style="width:80px;margin-top:1rem;"></div>
-  <div style="color:#94A3B8;font-size:0.9rem;margin-top:0.75rem;">用即梦生成你的第一个丝路文化短视频</div>
+  <div style="color:#94A3B8;font-size:0.9rem;margin-top:0.75rem;">用海螺AI生成你的第一个丝路文化短视频</div>
 </div>
 
 ---
@@ -17,7 +17,7 @@ layout: default
 
 <div class="card" style="text-align:center;border-color:#B8860B;">
   <div style="font-size:1rem;font-weight:700;color:#B8860B;margin-bottom:.5rem;">任务一：文生视频</div>
-  <div style="font-size:0.82rem;color:#78716C;">用文字提示词生成3~10秒视频</div>
+  <div style="font-size:0.82rem;color:#78716C;">用文字提示词生成5~10秒视频</div>
   <div style="font-size:0.78rem;color:#78716C;margin-top:.5rem;">要求：包含时间轴 + 运镜词</div>
 </div>
 
@@ -41,12 +41,12 @@ layout: default
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 1</div>
-  打开 jimeng.jianying.com，用抖音账号登录
+  打开 hailuoai.com，登录账号
 </div>
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 2</div>
-  点击"AI作视频"→"文生视频"
+  选择"视频生成"功能
 </div>
 
 <div class="card">
@@ -61,7 +61,7 @@ layout: default
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 5</div>
-  点"立即生成"，等待1~2分钟
+  点"生成"，等待1~2分钟
 </div>
 
 <div class="card">
@@ -79,12 +79,12 @@ layout: default
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 1</div>
-  打开即梦，上传上节课自己生成的海报
+  打开海螺AI，上传上节课自己生成的海报
 </div>
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 2</div>
-  点击"AI作视频"→"图生视频"
+  选择"图生视频"模式
 </div>
 
 <div class="card">
@@ -94,7 +94,7 @@ layout: default
 
 <div class="card">
   <div style="font-weight:700;color:#B8860B;margin-bottom:.5rem;">Step 4</div>
-  点"立即生成"，等待1~2分钟
+  点"生成"，等待1~2分钟
 </div>
 
 </div>
@@ -130,12 +130,12 @@ layout: default
       <td>切换时长（从10秒切到6秒），更换运镜词</td>
     </tr>
     <tr>
-      <td>积分耗尽</td>
-      <td>第二天重置，或次日再来</td>
+      <td>额度耗尽</td>
+      <td>第二天重置，或切换到即梦作为备用工具</td>
     </tr>
   </tbody>
 </table>
 
 <div class="mt-3 l-border" style="font-size:0.82rem;color:#1C2B4B;">
-  <strong>注意：</strong>不要在生成失败时反复点"立即生成"，会快速消耗积分。
+  <strong>注意：</strong>不要在生成失败时反复点"生成"，会快速消耗额度。
 </div>

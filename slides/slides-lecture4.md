@@ -20,7 +20,7 @@ src: ./parts/L4-02-cases.md
 ---
 
 ---
-src: ./parts/L4-03-jimeng-video.md
+src: ./parts/L4-03-hailuo-video.md
 ---
 
 ---
