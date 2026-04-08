@@ -15,3 +15,11 @@ Thumbs.db
 .idea/
 
 node_modules/
+.pnpm-lock.yaml
+slides/package-lock.json
+slides/pnpm-lock.yaml
+slides-lecture2/node_modules/
+slides-lecture2/package-lock.json
+.playwright-mcp/
+minimax-output/
+videos/

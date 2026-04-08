@@ -1,0 +1,160 @@
+/* ============================================
+   丝路文化智能叙事与国际传播 · Slidev 全局样式
+   风格：学术简约 · 有质感
+   ============================================ */
+
+:root {
+  --bg:        #F7F5F0;
+  --bg-dark:   #1C2B4B;
+  --text:      #1C1917;
+  --gold:      #B8860B;
+  --gold-lt:   #D4A843;
+  --muted:     #78716C;
+  --border:    #D4C5A9;
+  --code-bg:   #1E1E2E;
+}
+
+/* ---- 基础 ---- */
+.slidev-layout {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
+}
+
+.slidev-layout h1 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.slidev-layout h2 {
+  font-weight: 600;
+  color: var(--bg-dark);
+  letter-spacing: -0.01em;
+}
+
+.slidev-layout h3 {
+  font-weight: 500;
+  color: var(--bg-dark);
+}
+
+.slidev-layout p {
+  line-height: 1.75;
+}
+
+/* ---- 封面重置 ---- */
+.slidev-layout.cover {
+  background-color: var(--bg-dark) !important;
+}
+
+/* ---- 通用工具类 ---- */
+.gold-line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+  margin: 1.25rem 0;
+}
+
+.tag-label {
+  display: inline-block;
+  padding: 3px 12px;
+  border: 1px solid var(--gold-lt);
+  color: var(--gold-lt);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  font-weight: 400;
+}
+
+.section-num {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(212, 168, 67, 0.18);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.l-border {
+  border-left: 3px solid var(--gold);
+  padding-left: 1rem;
+}
+
+.stat-num {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 6px rgba(28,27,23,0.06);
+}
+
+.card-dark {
+  background: var(--bg-dark);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  background: rgba(184, 134, 11, 0.12);
+  color: var(--gold);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-dark {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.6);
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* ---- 代码块美化 ---- */
+.slidev-code pre {
+  border-radius: 8px !important;
+}
+
+/* ---- 表格美化 ---- */
+.slidev-layout table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.slidev-layout table th {
+  background: var(--bg-dark);
+  color: white;
+  padding: 0.6rem 1rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.slidev-layout table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.slidev-layout table tr:nth-child(even) td {
+  background: rgba(212, 197, 169, 0.12);
+}
+
+/* ---- 页码 ---- */
+.slidev-layout .slidev-page-number {
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
