@@ -6,14 +6,17 @@
     "dev:l2": "slidev slides-lecture2.md --open",
     "dev:l3": "slidev slides-lecture3.md --open",
     "dev:l4": "slidev slides-lecture4.md --open",
+    "dev:l5": "slidev slides-lecture5.md --open",
     "build": "slidev build slides.md",
     "build:l2": "slidev build slides-lecture2.md",
     "build:l3": "slidev build slides-lecture3.md",
     "build:l4": "slidev build slides-lecture4.md",
+    "build:l5": "slidev build slides-lecture5.md",
     "export": "slidev export slides.md --format pdf",
     "export:l2": "slidev export slides-lecture2.md --format pdf",
     "export:l3": "slidev export slides-lecture3.md --format pdf",
-    "export:l4": "slidev export slides-lecture4.md --format pdf"
+    "export:l4": "slidev export slides-lecture4.md --format pdf",
+    "export:l5": "slidev export slides-lecture5.md --format pdf"
   },
   "dependencies": {
     "@slidev/cli": "^0.49.0",
