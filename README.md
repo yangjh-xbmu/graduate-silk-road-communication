@@ -1,3 +1,12 @@
+---
+purpose: 《丝绸之路文化国际传播》研究生课程讲义与要点仓库
+status: active
+next_steps: []
+capabilities:
+  - course-material
+  - lecture-notes
+  - slides
+---
 # silkroad-culture-intl-comm
 
 《丝绸之路文化国际传播》课程讲义与要点。
