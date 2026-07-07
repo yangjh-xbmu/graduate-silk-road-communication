@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import time
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -40,6 +41,16 @@ def read_text(path: Path) -> str:
 
 def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8", newline="\n")
+
+
+def load_final_if_complete(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(read_text(path))
+    except json.JSONDecodeError:
+        return None
+    return data if data.get("completion_status") == "complete" else None
 
 
 def resolve_tool(name: str) -> str:
@@ -159,9 +170,10 @@ def codex_prompt(kimi_status: dict[str, Any], agy_status: dict[str, Any]) -> str
 def load_evidence(state: WorkflowState) -> WorkflowState:
     student_dir = Path(state["student_dir"])
     final_path = student_dir / "final-arbitration.langgraph.json"
-    if final_path.exists() and not state.get("force", False):
+    complete_final = load_final_if_complete(final_path)
+    if complete_final and not state.get("force", False):
         state["skipped"] = True
-        state["final_json"] = json.loads(read_text(final_path))
+        state["final_json"] = complete_final
         return state
 
     evidence_path = student_dir / "process-evidence.md"
@@ -342,6 +354,17 @@ def build_graph():
     return graph.compile()
 
 
+def student_dirs(process_root: Path) -> list[Path]:
+    return sorted(
+        [
+            path
+            for path in process_root.iterdir()
+            if path.is_dir() and (path.name.startswith("student-") or path.name.startswith("sample-"))
+        ],
+        key=lambda p: p.name.lower(),
+    )
+
+
 def find_default_process_root() -> Path | None:
     base = Path("D:/Users/yangjh/Desktop/Inbox/_processed")
     if not base.exists():
@@ -350,11 +373,171 @@ def find_default_process_root() -> Path | None:
     return matches[0] if matches else None
 
 
+def run_one(student_dir: Path, process_root: Path, timeout_seconds: int, force: bool) -> dict[str, Any]:
+    initial: WorkflowState = {
+        "student_dir": str(student_dir.resolve()),
+        "process_root": str(process_root.resolve()),
+        "timeout_seconds": timeout_seconds,
+        "force": force,
+        "started_at": time.time(),
+    }
+    result = build_graph().invoke(initial)
+    final_json = result.get("final_json", {})
+    return {
+        "student_dir": str(student_dir),
+        "student_key": student_dir.name,
+        "skipped": bool(result.get("skipped")),
+        "completion_status": final_json.get("completion_status"),
+        "total": final_json.get("total"),
+        "assignment1": final_json.get("assignment1"),
+        "assignment2": final_json.get("assignment2"),
+        "kimi_total": final_json.get("kimi_total") if final_json.get("kimi_total") is not None else result.get("kimi", {}).get("parsed_total"),
+        "agy_total": final_json.get("agy_total") if final_json.get("agy_total") is not None else result.get("agy", {}).get("parsed_total"),
+        "codex_total": result.get("codex", {}).get("parsed_total"),
+        "final_json_path": str(student_dir / "final-arbitration.langgraph.json"),
+    }
+
+
+def write_batch_summary(process_root: Path, records: list[dict[str, Any]]) -> dict[str, str]:
+    out_json = process_root / "process-score-langgraph-summary.json"
+    out_md = process_root / "process-score-langgraph-summary.md"
+    completed = [r for r in records if r.get("completion_status") == "complete"]
+    incomplete = [r for r in records if r.get("completion_status") != "complete"]
+    payload = {
+        "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "total_students": len(records),
+        "completed": len(completed),
+        "incomplete": len(incomplete),
+        "records": records,
+    }
+    write_text(out_json, json.dumps(payload, ensure_ascii=False, indent=2))
+    lines = [
+        "# LangGraph Process Score Summary",
+        "",
+        f"- Generated at: {payload['generated_at']}",
+        f"- Total students: {len(records)}",
+        f"- Completed: {len(completed)}",
+        f"- Incomplete: {len(incomplete)}",
+        "",
+        "| Student | Status | Total | Assignment 1 | Assignment 2 | Kimi | agy | Codex |",
+        "|---|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for record in records:
+        lines.append(
+            "| {student_key} | {completion_status} | {total} | {assignment1} | {assignment2} | {kimi_total} | {agy_total} | {codex_total} |".format(
+                **{k: "" if v is None else v for k, v in record.items()}
+            )
+        )
+    write_text(out_md, "\n".join(lines) + "\n")
+    return {"json": str(out_json), "md": str(out_md)}
+
+
+def write_batch_status(
+    process_root: Path,
+    records: list[dict[str, Any]],
+    running: dict[str, float],
+    total_students: int,
+) -> None:
+    payload = {
+        "updated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "total_students": total_students,
+        "finished": len(records),
+        "running": [
+            {"student_key": key, "elapsed_seconds": round(time.time() - started, 1)}
+            for key, started in sorted(running.items())
+        ],
+        "completed": sum(1 for record in records if record.get("completion_status") == "complete"),
+        "incomplete": sum(1 for record in records if record.get("completion_status") != "complete"),
+        "records": records,
+    }
+    write_text(process_root / "process-score-langgraph-status.json", json.dumps(payload, ensure_ascii=False, indent=2))
+
+
+def run_batch(
+    process_root: Path,
+    timeout_seconds: int,
+    force: bool,
+    max_workers: int,
+    monitor_interval: int,
+) -> dict[str, Any]:
+    dirs = student_dirs(process_root)
+    records: list[dict[str, Any]] = []
+    pending = list(dirs)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures: dict[Any, Path] = {}
+        running: dict[str, float] = {}
+        while pending and len(futures) < max_workers:
+            student_dir = pending.pop(0)
+            future = executor.submit(run_one, student_dir, process_root, timeout_seconds, force)
+            futures[future] = student_dir
+            running[student_dir.name] = time.time()
+        while futures:
+            done, _ = wait(futures.keys(), timeout=monitor_interval, return_when=FIRST_COMPLETED)
+            if not done:
+                write_batch_status(process_root, records, running, len(dirs))
+                print(
+                    json.dumps(
+                        {
+                            "event": "progress",
+                            "finished": len(records),
+                            "total": len(dirs),
+                            "running": [
+                                {"student_key": key, "elapsed_seconds": round(time.time() - started, 1)}
+                                for key, started in sorted(running.items())
+                            ],
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                continue
+            for future in done:
+                student_dir = futures.pop(future)
+                running.pop(student_dir.name, None)
+                try:
+                    record = future.result()
+                except Exception as exc:
+                    record = {
+                        "student_dir": str(student_dir),
+                        "student_key": student_dir.name,
+                        "skipped": False,
+                        "completion_status": "error",
+                        "error": repr(exc),
+                        "total": None,
+                        "assignment1": None,
+                        "assignment2": None,
+                        "kimi_total": None,
+                        "agy_total": None,
+                        "codex_total": None,
+                        "final_json_path": str(student_dir / "final-arbitration.langgraph.json"),
+                    }
+                records.append(record)
+                write_batch_status(process_root, records, running, len(dirs))
+                print(json.dumps({"event": "student_done", **record}, ensure_ascii=False), flush=True)
+                while pending and len(futures) < max_workers:
+                    next_student_dir = pending.pop(0)
+                    next_future = executor.submit(run_one, next_student_dir, process_root, timeout_seconds, force)
+                    futures[next_future] = next_student_dir
+                    running[next_student_dir.name] = time.time()
+    records.sort(key=lambda r: str(r.get("student_key", "")).lower())
+    summary_paths = write_batch_summary(process_root, records)
+    completed = sum(1 for record in records if record.get("completion_status") == "complete")
+    return {
+        "total_students": len(records),
+        "completed": completed,
+        "incomplete": len(records) - completed,
+        "summary": summary_paths,
+    }
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run LangGraph process-score grading for one student.")
-    parser.add_argument("--student-dir", required=True, help="Prepared student process-score directory.")
+    parser = argparse.ArgumentParser(description="Run LangGraph process-score grading.")
+    parser.add_argument("--student-dir", help="Prepared student process-score directory.")
+    parser.add_argument("--all", action="store_true", help="Grade all student directories under the process-score root.")
     parser.add_argument("--process-root", help="Process-score root. Defaults to latest Inbox/_processed/*/grading/process-score.")
-    parser.add_argument("--timeout-seconds", type=int, default=180, help="Per-reviewer timeout.")
+    parser.add_argument("--timeout-seconds", type=int, default=600, help="Per-reviewer timeout.")
+    parser.add_argument("--max-workers", type=int, default=2, help="Concurrent students for --all.")
+    parser.add_argument("--monitor-interval", type=int, default=30, help="Progress heartbeat interval for --all.")
     parser.add_argument("--force", action="store_true", help="Regenerate even if final arbitration exists.")
     return parser.parse_args(argv)
 
@@ -364,17 +547,21 @@ def main(argv: list[str]) -> int:
     process_root = Path(args.process_root) if args.process_root else find_default_process_root()
     if not process_root:
         raise SystemExit("Could not locate process-score root. Pass --process-root.")
-    student_dir = Path(args.student_dir)
-    initial: WorkflowState = {
-        "student_dir": str(student_dir.resolve()),
-        "process_root": str(process_root.resolve()),
-        "timeout_seconds": args.timeout_seconds,
-        "force": args.force,
-        "started_at": time.time(),
-    }
-    result = build_graph().invoke(initial)
-    print(json.dumps(result.get("final_json", {}), ensure_ascii=False, indent=2))
-    return 0 if result.get("final_json", {}).get("completion_status") == "complete" else 1
+    if args.all:
+        summary = run_batch(
+            process_root.resolve(),
+            args.timeout_seconds,
+            args.force,
+            max(1, args.max_workers),
+            max(5, args.monitor_interval),
+        )
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0 if summary["incomplete"] == 0 else 1
+    if not args.student_dir:
+        raise SystemExit("Pass --student-dir or --all.")
+    result = run_one(Path(args.student_dir), process_root.resolve(), args.timeout_seconds, args.force)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result.get("completion_status") == "complete" else 1
 
 
 if __name__ == "__main__":

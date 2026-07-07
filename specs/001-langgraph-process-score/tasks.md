@@ -36,5 +36,5 @@
 
 ## Follow-up
 
-- [ ] T018 Extend workflow to batch scheduling after smoke test passes
-- [ ] T019 Add Excel `pscj` write-back after batch scoring is stable
+- [x] T018 Extend workflow to batch scheduling after smoke test passes
+- [x] T019 Add Excel `pscj` write-back after batch scoring is stable
